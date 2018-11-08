@@ -1,3 +1,5 @@
+exports.Cancel = class CancelError extends Error {}
+
 const BaseError = exports.BaseError = class BaseError extends Error {
   constructor (message, data = null) {
     super(message)
