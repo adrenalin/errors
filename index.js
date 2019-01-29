@@ -10,6 +10,15 @@ const BaseError = exports.BaseError = class BaseError extends Error {
 }
 
 // Series 300
+exports.MultipleChoices = class MultipleChoices extends BaseError {
+  constructor (message, data = {}) {
+    message = message || 'Multiple Choices'
+    data.locations = Array.isArray(data.locations) ? data.locations : [data.locations]
+    super(message, data)
+    this.statusCode = 300
+  }
+}
+
 exports.MovedPermanently = class MovedPermanently extends BaseError {
   constructor (message, data = {}) {
     message = message || 'Moved Permanently'
@@ -25,6 +34,15 @@ exports.Found = class Found extends BaseError {
     data.location = data.location || ''
     super(message, data)
     this.statusCode = 302
+  }
+}
+
+exports.SeeOther = class SeeOther extends BaseError {
+  constructor (message, data = {}) {
+    message = message || 'See Other'
+    data.locations = Array.isArray(data.locations) ? data.locations : [data.locations]
+    super(message, data)
+    this.statusCode = 303
   }
 }
 
