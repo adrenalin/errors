@@ -137,3 +137,43 @@ exports.NotImplemented = class NotImplemented extends BaseError {
     this.statusCode = 501
   }
 }
+
+exports.BadGateway = class BadGateway extends BaseError {
+  constructor (message, data) {
+    message = message || 'Bad Gateway'
+    super(message, data)
+    this.statusCode = 502
+  }
+}
+
+exports.ServiceUnavailable = class ServiceUnavailable extends BaseError {
+  constructor (message, data) {
+    message = message || 'Service Unavailable'
+    super(message, data)
+    this.statusCode = 503
+  }
+}
+
+exports.GatewayTimeout = class GatewayTimeout extends BaseError {
+  constructor (message, data) {
+    message = message || 'Gateway Timeout'
+    super(message, data)
+    this.statusCode = 504
+  }
+}
+
+exports.HTTPVersionNotSupported = class HTTPVersionNotSupported extends BaseError {
+  constructor (message, data) {
+    message = message || 'HTTP Version Not Supported'
+    super(message, data)
+    this.statusCode = 505
+  }
+}
+
+exports.NetworkReadTimeout = exports.NetworkReadTimeoutError = class NetworkReadTimeout extends BaseError {
+  constructor (message, data) {
+    message = message || 'Network read timeout error'
+    super(message, data)
+    this.statusCode = 598
+  }
+}
