@@ -29,10 +29,6 @@ const BaseError = exports.BaseError = class BaseError extends Error {
 
 // Series 200
 const Success = exports.Success = class Success extends BaseError {
-  static get statusCode () {
-    return 200
-  }
-
   static get message () {
     return 'Success'
   }
@@ -100,17 +96,13 @@ exports.PartialContent = class PartialContent extends Success {
 
 // Series 300
 const Redirection = exports.Redirection = class Redirection extends BaseError {
-  static get statusCode () {
-    return 300
-  }
-
   static get message () {
-    return 'Multiple Choices'
+    return 'Redirection'
   }
 
   constructor (message, data = {}) {
     super(message, data)
-    this.data.location = data.location || ''
+    this.data.location = data.location || null
   }
 }
 
@@ -186,35 +178,27 @@ exports.NotModified = class NotModified extends Redirection {
 
 // Series 400
 const ClientError = exports.ClientError = class ClientError extends BaseError {
-  static get statusCode () {
-    return 400
-  }
-
   static get message () {
     return 'Client Error'
   }
 }
 
-exports.FormValidation = class FormValidation extends ClientError {
-  static get statusCode () {
-    return 400
-  }
-
-  constructor (errors, data) {
-    const k = Object.keys(errors)[0]
-    const primary = errors[k]
-    super(primary.error, data)
-    this.errors = errors
-  }
-}
-
-exports.BadRequest = class BadRequest extends ClientError {
+const BadRequest = exports.BadRequest = class BadRequest extends ClientError {
   static get statusCode () {
     return 400
   }
 
   static get message () {
     return 'Bad Request'
+  }
+}
+
+exports.FormValidation = class FormValidation extends BadRequest {
+  constructor (errors, data) {
+    const k = Object.keys(errors)[0]
+    const primary = errors[k]
+    super(primary.error, data)
+    this.errors = errors
   }
 }
 
@@ -485,10 +469,6 @@ exports.UnavailableForLegalReasons = class UnavailableForLegalReasons extends Cl
 
 // Series 500
 const ServerError = exports.ServerError = class ServerError extends BaseError {
-  static get statusCode () {
-    return 500
-  }
-
   static get message () {
     return 'Server Error'
   }
