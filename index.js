@@ -1,6 +1,22 @@
 exports.Cancel = class CancelError extends Error {}
 
-const BaseError = exports.BaseError = class BaseError extends Error {
+/**
+ * Invalid argument error
+ */
+exports.InvalidArgument = class InvalidArgument extends Error {
+  /**
+   * Set the argument name in constructor
+   *
+   * @param { string } message        Error message
+   * @param { string } name           Argument name
+   */
+  constructor (message, name) {
+    super(message)
+    this.name = name
+  }
+}
+
+const HTTPError = exports.BaseError = exports.HTTPError = class HTTPError extends Error {
   /**
    * Set the status code so that it can be read without initializing the class
    *
@@ -27,13 +43,18 @@ const BaseError = exports.BaseError = class BaseError extends Error {
   }
 }
 
-// Series 200
-const Success = exports.Success = class Success extends BaseError {
+/**
+ * Response group for HTTP/1.1 200 Success series
+ */
+const Success = exports.Success = class Success extends HTTPError {
   static get message () {
     return 'Success'
   }
 }
 
+/**
+ * Response for HTTP/1.1 200 OK
+ */
 exports.OK = class OK extends Success {
   static get statusCode () {
     return 200
@@ -44,6 +65,9 @@ exports.OK = class OK extends Success {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 201 Created
+ */
 exports.Created = class Created extends Success {
   static get statusCode () {
     return 201
@@ -54,6 +78,9 @@ exports.Created = class Created extends Success {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 202 Accepted
+ */
 exports.Accepted = class Accepted extends Success {
   static get statusCode () {
     return 202
@@ -64,6 +91,9 @@ exports.Accepted = class Accepted extends Success {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 204 No content
+ */
 exports.NoContent = class NoContent extends Success {
   static get statusCode () {
     return 204
@@ -74,6 +104,9 @@ exports.NoContent = class NoContent extends Success {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 205 Reset content
+ */
 exports.ResetContent = class ResetContent extends Success {
   static get statusCode () {
     return 205
@@ -84,6 +117,9 @@ exports.ResetContent = class ResetContent extends Success {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 206 Partial content
+ */
 exports.PartialContent = class PartialContent extends Success {
   static get statusCode () {
     return 206
@@ -94,18 +130,30 @@ exports.PartialContent = class PartialContent extends Success {
   }
 }
 
-// Series 300
-const Redirection = exports.Redirection = class Redirection extends BaseError {
+/**
+ * Response group for HTTP/1.1 300 Redirection series
+ */
+const Redirection = exports.Redirection = class Redirection extends HTTPError {
   static get message () {
     return 'Redirection'
   }
 
+  /**
+   * Accept data argument that passes the required location information to the
+   * HTTP request
+   *
+   * @param { string } message        Error message
+   * @param { object } data           Extended data
+   */
   constructor (message, data = {}) {
     super(message, data)
     this.data.location = data.location || null
   }
 }
 
+/**
+ * Response for  HTTP/1.1 300 Multiple choices
+ */
 exports.MultipleChoices = class MultipleChoices extends Redirection {
   static get statusCode () {
     return 300
@@ -121,6 +169,9 @@ exports.MultipleChoices = class MultipleChoices extends Redirection {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 301 Moved permanently
+ */
 exports.MovedPermanently = class MovedPermanently extends Redirection {
   static get statusCode () {
     return 301
@@ -136,6 +187,9 @@ exports.MovedPermanently = class MovedPermanently extends Redirection {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 302 Found
+ */
 exports.Found = class Found extends Redirection {
   static get statusCode () {
     return 302
@@ -151,6 +205,9 @@ exports.Found = class Found extends Redirection {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 303 See other
+ */
 exports.SeeOther = class SeeOther extends Redirection {
   static get statusCode () {
     return 303
@@ -166,6 +223,9 @@ exports.SeeOther = class SeeOther extends Redirection {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 304 Not modified
+ */
 exports.NotModified = class NotModified extends Redirection {
   static get statusCode () {
     return 304
@@ -176,13 +236,18 @@ exports.NotModified = class NotModified extends Redirection {
   }
 }
 
-// Series 400
-const ClientError = exports.ClientError = class ClientError extends BaseError {
+/**
+ * Response group for HTTP/1.1 400 Client error series
+ */
+const ClientError = exports.ClientError = class ClientError extends HTTPError {
   static get message () {
     return 'Client Error'
   }
 }
 
+/**
+ * Response for  HTTP/1.1 400 Bad request
+ */
 const BadRequest = exports.BadRequest = class BadRequest extends ClientError {
   static get statusCode () {
     return 400
@@ -193,15 +258,34 @@ const BadRequest = exports.BadRequest = class BadRequest extends ClientError {
   }
 }
 
+/**
+ * Form validation extension for  HTTP/1.1 400 Bad request
+ */
 exports.FormValidation = class FormValidation extends BadRequest {
+  /**
+   * Store the error data
+   *
+   * @param { mixed } errors          Either a string for the message or object with all the errors
+   * @param {  }
+   */
   constructor (errors, data) {
-    const k = Object.keys(errors)[0]
-    const primary = errors[k]
-    super(primary.error, data)
+    let message
+    try {
+      const k = Object.keys(errors)[0]
+      const primary = errors[k]
+      message = primary.error
+    } catch (err) {
+    }
+
+    super(message || FormValidation.message)
     this.errors = errors
+    this.data = data
   }
 }
 
+/**
+ * Response for  HTTP/1.1 401 Unauthorized
+ */
 exports.Unauthorized = class Unauthorized extends ClientError {
   static get statusCode () {
     return 401
@@ -212,6 +296,9 @@ exports.Unauthorized = class Unauthorized extends ClientError {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 402 Payment required
+ */
 exports.PaymentRequired = class PaymentRequired extends ClientError {
   static get statusCode () {
     return 402
@@ -222,6 +309,9 @@ exports.PaymentRequired = class PaymentRequired extends ClientError {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 403 Forbidden
+ */
 exports.Forbidden = class Forbidden extends ClientError {
   static get statusCode () {
     return 403
@@ -232,6 +322,9 @@ exports.Forbidden = class Forbidden extends ClientError {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 404 Not found
+ */
 exports.NotFound = class NotFound extends ClientError {
   static get statusCode () {
     return 404
@@ -242,6 +335,9 @@ exports.NotFound = class NotFound extends ClientError {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 405 Method not allowed
+ */
 exports.MethodNotAllowed = class MethodNotAllowed extends ClientError {
   static get statusCode () {
     return 405
@@ -252,6 +348,9 @@ exports.MethodNotAllowed = class MethodNotAllowed extends ClientError {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 406 Not acceptable
+ */
 exports.NotAcceptable = class NotAcceptable extends ClientError {
   static get statusCode () {
     return 406
@@ -262,6 +361,9 @@ exports.NotAcceptable = class NotAcceptable extends ClientError {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 407 Proxy authentication required
+ */
 exports.ProxyAuthenticationRequired = class ProxyAuthenticationRequired extends ClientError {
   static get statusCode () {
     return 407
@@ -272,6 +374,9 @@ exports.ProxyAuthenticationRequired = class ProxyAuthenticationRequired extends 
   }
 }
 
+/**
+ * Response for  HTTP/1.1 408 Request timeout
+ */
 exports.RequestTimeout = class RequestTimeout extends ClientError {
   static get statusCode () {
     return 408
@@ -281,12 +386,21 @@ exports.RequestTimeout = class RequestTimeout extends ClientError {
     return 'Request timeout'
   }
 
+  /**
+   * Store the error data
+   *
+   * @param { string } message        Error message
+   * @param { object } data           Error details
+   */
   constructor (message, data) {
-    message = message || 'Request timeout'
+    message = message || RequestTimeout.message
     super(message, data)
   }
 }
 
+/**
+ * Response for  HTTP/1.1 409 Conflict
+ */
 exports.Conflict = class Conflict extends ClientError {
   static get statusCode () {
     return 409
@@ -297,6 +411,9 @@ exports.Conflict = class Conflict extends ClientError {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 410 Gone
+ */
 exports.Gone = class Gone extends ClientError {
   static get statusCode () {
     return 410
@@ -307,6 +424,9 @@ exports.Gone = class Gone extends ClientError {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 411 Length required
+ */
 exports.LengthRequired = class LengthRequired extends ClientError {
   static get statusCode () {
     return 411
@@ -317,6 +437,9 @@ exports.LengthRequired = class LengthRequired extends ClientError {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 412 Precondition failed
+ */
 exports.PreconditionFailed = class PreconditionFailed extends ClientError {
   static get statusCode () {
     return 412
@@ -327,6 +450,9 @@ exports.PreconditionFailed = class PreconditionFailed extends ClientError {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 413 Payload too large
+ */
 exports.PayloadTooLarge = class PayloadTooLarge extends ClientError {
   static get statusCode () {
     return 413
@@ -337,6 +463,9 @@ exports.PayloadTooLarge = class PayloadTooLarge extends ClientError {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 414 URI too long
+ */
 exports.URITooLong = class URITooLong extends ClientError {
   static get statusCode () {
     return 414
@@ -347,6 +476,9 @@ exports.URITooLong = class URITooLong extends ClientError {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 415 Unsupported media type
+ */
 exports.UnsupportedMediaType = class UnsupportedMediaType extends ClientError {
   static get statusCode () {
     return 415
@@ -357,6 +489,9 @@ exports.UnsupportedMediaType = class UnsupportedMediaType extends ClientError {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 416 Range not satisfiable
+ */
 exports.RangeNotSatisfiable = class RangeNotSatisfiable extends ClientError {
   static get statusCode () {
     return 416
@@ -367,6 +502,9 @@ exports.RangeNotSatisfiable = class RangeNotSatisfiable extends ClientError {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 417 Expectation failed
+ */
 exports.ExpectationFailed = class ExpectationFailed extends ClientError {
   static get statusCode () {
     return 417
@@ -377,6 +515,9 @@ exports.ExpectationFailed = class ExpectationFailed extends ClientError {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 421 Misdirected request
+ */
 exports.MisdirectedRequest = class MisdirectedRequest extends ClientError {
   static get statusCode () {
     return 421
@@ -387,6 +528,9 @@ exports.MisdirectedRequest = class MisdirectedRequest extends ClientError {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 422 Unprocessable entity
+ */
 exports.UnprocessableEntity = class UnprocessableEntity extends ClientError {
   static get statusCode () {
     return 422
@@ -397,6 +541,9 @@ exports.UnprocessableEntity = class UnprocessableEntity extends ClientError {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 423 Locked
+ */
 exports.Locked = class Locked extends ClientError {
   static get statusCode () {
     return 423
@@ -407,6 +554,9 @@ exports.Locked = class Locked extends ClientError {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 424 Failed dependency
+ */
 exports.FailedDependency = class FailedDependency extends ClientError {
   static get statusCode () {
     return 424
@@ -417,6 +567,9 @@ exports.FailedDependency = class FailedDependency extends ClientError {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 426 Upgrade required
+ */
 exports.UpgradeRequired = class UpgradeRequired extends ClientError {
   static get statusCode () {
     return 426
@@ -427,6 +580,9 @@ exports.UpgradeRequired = class UpgradeRequired extends ClientError {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 428 Precondition failed
+ */
 exports.PreconditionRequired = class PreconditionRequired extends ClientError {
   static get statusCode () {
     return 428
@@ -437,6 +593,9 @@ exports.PreconditionRequired = class PreconditionRequired extends ClientError {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 429 Too many requests
+ */
 exports.TooManyRequests = class TooManyRequests extends ClientError {
   static get statusCode () {
     return 429
@@ -447,6 +606,9 @@ exports.TooManyRequests = class TooManyRequests extends ClientError {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 432 Request header fields too large
+ */
 exports.RequestHeaderFieldsTooLarge = class RequestHeaderFieldsTooLarge extends ClientError {
   static get statusCode () {
     return 431
@@ -457,6 +619,9 @@ exports.RequestHeaderFieldsTooLarge = class RequestHeaderFieldsTooLarge extends 
   }
 }
 
+/**
+ * Response for  HTTP/1.1 451 Unavailable for legal reasons
+ */
 exports.UnavailableForLegalReasons = class UnavailableForLegalReasons extends ClientError {
   static get statusCode () {
     return 451
@@ -467,13 +632,18 @@ exports.UnavailableForLegalReasons = class UnavailableForLegalReasons extends Cl
   }
 }
 
-// Series 500
-const ServerError = exports.ServerError = class ServerError extends BaseError {
+/**
+ * Response group for HTTP/1.1 400 Server error series
+ */
+const ServerError = exports.ServerError = class ServerError extends HTTPError {
   static get message () {
     return 'Server Error'
   }
 }
 
+/**
+ * Response for  HTTP/1.1 500 Internal server error
+ */
 exports.InternalServerError = class InternalServerError extends ServerError {
   static get statusCode () {
     return 500
@@ -484,6 +654,9 @@ exports.InternalServerError = class InternalServerError extends ServerError {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 501 Not implemented
+ */
 exports.NotImplemented = class NotImplemented extends ServerError {
   static get statusCode () {
     return 501
@@ -494,6 +667,9 @@ exports.NotImplemented = class NotImplemented extends ServerError {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 502 Bad gateway
+ */
 exports.BadGateway = class BadGateway extends ServerError {
   static get statusCode () {
     return 502
@@ -504,6 +680,9 @@ exports.BadGateway = class BadGateway extends ServerError {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 503 Service unavailable
+ */
 exports.ServiceUnavailable = class ServiceUnavailable extends ServerError {
   static get statusCode () {
     return 503
@@ -514,6 +693,9 @@ exports.ServiceUnavailable = class ServiceUnavailable extends ServerError {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 504 Gateway timeout
+ */
 exports.GatewayTimeout = class GatewayTimeout extends ServerError {
   static get statusCode () {
     return 504
@@ -524,6 +706,9 @@ exports.GatewayTimeout = class GatewayTimeout extends ServerError {
   }
 }
 
+/**
+ * Response for  HTTP/1.1 505 HTTP version not supported
+ */
 exports.HTTPVersionNotSupported = class HTTPVersionNotSupported extends ServerError {
   static get statusCode () {
     return 505
@@ -534,6 +719,9 @@ exports.HTTPVersionNotSupported = class HTTPVersionNotSupported extends ServerEr
   }
 }
 
+/**
+ * Response for  HTTP/1.1 598 Network read timeout
+ */
 exports.NetworkReadTimeout = exports.NetworkReadTimeoutError = class NetworkReadTimeout extends ServerError {
   static get statusCode () {
     return 598
