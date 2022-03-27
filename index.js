@@ -259,7 +259,7 @@ const BadRequest = exports.BadRequest = class BadRequest extends ClientError {
 }
 
 /**
- * Form validation extension for  HTTP/1.1 400 Bad request
+ * Form validation extension for HTTP/1.1 400 Bad request
  */
 exports.FormValidation = class FormValidation extends BadRequest {
   /**
@@ -280,6 +280,22 @@ exports.FormValidation = class FormValidation extends BadRequest {
     super(message || FormValidation.message)
     this.errors = errors
     this.data = data
+  }
+}
+
+/**
+ * JSON schema validation error extension for HTTP/1.1 400 Bad Request
+ */
+exports.ValidationError = class ValidationError extends BadRequest {
+  /**
+   * Store the error data
+   *
+   * @param { mixed } errors          Either a string for the message or object with all the errors
+   * @param {  }
+   */
+  constructor (message, results) {
+    super(message)
+    this.errors = results
   }
 }
 
