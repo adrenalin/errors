@@ -1,15 +1,18 @@
 /**
  * Cancel an interaction
  *
- * @class CancelError
+ * @class Cancel an interaction error
  */
 exports.Cancel = exports.CancelError = class CancelError extends Error {}
 
+/**
+ * Invalid argument
+ * @class Invalid argument
+ */
 exports.InvalidArgument = class InvalidArgument extends Error {
   /**
    * Set the argument name in constructor
    *
-   * @class                           InvalidArgument
    * @param { string } message        Error message
    * @param { string } name           Argument name
    */
@@ -19,6 +22,13 @@ exports.InvalidArgument = class InvalidArgument extends Error {
   }
 }
 
+/**
+ * HTTP error
+ *
+ * @namespace HTTPError
+ * @interface HTTPError
+ * @class HTTP error baseclass
+ */
 const HTTPError = exports.BaseError = exports.HTTPError = class HTTPError extends Error {
   /**
    * Set the status code so that it can be read without initializing the class
@@ -42,7 +52,6 @@ const HTTPError = exports.BaseError = exports.HTTPError = class HTTPError extend
   /**
    * Generic HTTP status code error
    *
-   * @interface HTTPError
    * @param { string } message        Error message
    * @param { array|object } [data]   Error data
    */
@@ -57,8 +66,10 @@ const HTTPError = exports.BaseError = exports.HTTPError = class HTTPError extend
 /**
  * Response group for HTTP/1.1 200 Success series
  *
- * @class Success
- * @implements HTTPError
+ * @memberof HTTPError
+ * @namespace HTTPError.Success
+ * @class HTTP/1.1 200 Success series
+ * @extends HTTPError
  */
 const Success = exports.Success = class Success extends HTTPError {
   /**
@@ -74,8 +85,8 @@ const Success = exports.Success = class Success extends HTTPError {
 /**
  * Response for HTTP/1.1 200 OK
  *
- * @class OK
- * @implements Success
+ * @class HTTP/1.1 200 OK
+ * @extends Success
  */
 exports.OK = class OK extends Success {
   /**
@@ -96,10 +107,10 @@ exports.OK = class OK extends Success {
 }
 
 /**
- * Response for  HTTP/1.1 201 Created
+ * Response for HTTP/1.1 201 Created
  *
- * @class Created
- * @implements Success
+ * @class HTTP/1.1 201 Created
+ * @extends Success
  */
 exports.Created = class Created extends Success {
   /**
@@ -120,10 +131,10 @@ exports.Created = class Created extends Success {
 }
 
 /**
- * Response for  HTTP/1.1 202 Accepted
+ * Response for HTTP/1.1 202 Accepted
  *
- * @class Accepted
- * @implements Success
+ * @class HTTP/1.1 202 Accepted
+ * @extends Success
  */
 exports.Accepted = class Accepted extends Success {
   /**
@@ -144,10 +155,10 @@ exports.Accepted = class Accepted extends Success {
 }
 
 /**
- * Response for  HTTP/1.1 204 No content
+ * Response for HTTP/1.1 204 No content
  *
- * @class NoContent
- * @implements Success
+ * @class HTTP/1.1 204 No content
+ * @extends Success
  */
 exports.NoContent = class NoContent extends Success {
   /**
@@ -168,10 +179,10 @@ exports.NoContent = class NoContent extends Success {
 }
 
 /**
- * Response for  HTTP/1.1 205 Reset content
+ * Response for HTTP/1.1 205 Reset content
  *
- * @class ResetContent
- * @implements Success
+ * @class HTTP/1.1 205 Reset content
+ * @extends Success
  */
 exports.ResetContent = class ResetContent extends Success {
   /**
@@ -192,10 +203,10 @@ exports.ResetContent = class ResetContent extends Success {
 }
 
 /**
- * Response for  HTTP/1.1 206 Partial content
+ * Response for HTTP/1.1 206 Partial content
  *
- * @class PartialContent
- * @implements Success
+ * @class HTTP/1.1 206 Partial content
+ * @extends Success
  */
 exports.PartialContent = class PartialContent extends Success {
   /**
@@ -219,7 +230,7 @@ exports.PartialContent = class PartialContent extends Success {
  * Response group for HTTP/1.1 300 Redirection series
  *
  * @interface Redirection
- * @implements HTTPError
+ * @extends HTTPError
  */
 const Redirection = exports.Redirection = class Redirection extends HTTPError {
   /**
@@ -244,10 +255,10 @@ const Redirection = exports.Redirection = class Redirection extends HTTPError {
 }
 
 /**
- * Response for  HTTP/1.1 300 Multiple choices
+ * Response for HTTP/1.1 300 Multiple choices
  *
- * @class MultipleChoices
- * @implements Redirection
+ * @class HTTP/1.1 300 Multiple choices
+ * @extends Redirection
  */
 exports.MultipleChoices = class MultipleChoices extends Redirection {
   /**
@@ -273,10 +284,10 @@ exports.MultipleChoices = class MultipleChoices extends Redirection {
 }
 
 /**
- * Response for  HTTP/1.1 301 Moved permanently
+ * Response for HTTP/1.1 301 Moved permanently
  *
- * @class MovedPermanently
- * @implements Redirection
+ * @class HTTP/1.1 301 Moved permanently
+ * @extends Redirection
  */
 exports.MovedPermanently = class MovedPermanently extends Redirection {
   /**
@@ -302,10 +313,10 @@ exports.MovedPermanently = class MovedPermanently extends Redirection {
 }
 
 /**
- * Response for  HTTP/1.1 302 Found
+ * Response for HTTP/1.1 302 Found
  *
- * @class Found
- * @implements Redirection
+ * @class HTTP/1.1 302 Found
+ * @extends Redirection
  */
 exports.Found = class Found extends Redirection {
   /**
@@ -331,10 +342,10 @@ exports.Found = class Found extends Redirection {
 }
 
 /**
- * Response for  HTTP/1.1 303 See other
+ * Response for HTTP/1.1 303 See other
  *
- * @class SeeOther
- * @implements Redirection
+ * @class HTTP/1.1 303 See other
+ * @extends Redirection
  */
 exports.SeeOther = class SeeOther extends Redirection {
   /**
@@ -360,10 +371,10 @@ exports.SeeOther = class SeeOther extends Redirection {
 }
 
 /**
- * Response for  HTTP/1.1 304 Not modified
+ * Response for HTTP/1.1 304 Not modified
  *
- * @class NotModified
- * @implements Redirection
+ * @class HTTP/1.1 304 Not modified
+ * @extends Redirection
  */
 exports.NotModified = class NotModified extends Redirection {
   /**
@@ -387,7 +398,7 @@ exports.NotModified = class NotModified extends Redirection {
  * Response group for HTTP/1.1 400 Client error series
  *
  * @interface ClientError
- * @implements HTTPError
+ * @extends HTTPError
  */
 const ClientError = exports.ClientError = class ClientError extends HTTPError {
   /**
@@ -400,10 +411,10 @@ const ClientError = exports.ClientError = class ClientError extends HTTPError {
 }
 
 /**
- * Response for  HTTP/1.1 400 Bad request
+ * Response for HTTP/1.1 400 Bad request
  *
- * @class BadRequest
- * @implements ClientError
+ * @class HTTP/1.1 400 Bad request
+ * @extends ClientError
  */
 const BadRequest = exports.BadRequest = class BadRequest extends ClientError {
   /**
@@ -426,8 +437,8 @@ const BadRequest = exports.BadRequest = class BadRequest extends ClientError {
 /**
  * Form validation extension for HTTP/1.1 400 Bad request
  *
- * @class FormValidation
- * @implements BadRequest
+ * @class Form validation extension for HTTP/1.1 400 Bad request
+ * @extends BadRequest
  */
 exports.FormValidation = class FormValidation extends BadRequest {
   /**
@@ -454,8 +465,8 @@ exports.FormValidation = class FormValidation extends BadRequest {
 /**
  * JSON schema validation error extension for HTTP/1.1 400 Bad Request
  *
- * @class ValidationError
- * @implements BadRequest
+ * @class JSON schema validation error extension for HTTP/1.1 400 Bad Request
+ * @extends BadRequest
  */
 exports.ValidationError = class ValidationError extends BadRequest {
   /**
@@ -471,10 +482,10 @@ exports.ValidationError = class ValidationError extends BadRequest {
 }
 
 /**
- * Response for  HTTP/1.1 401 Unauthorized
+ * Response for HTTP/1.1 401 Unauthorized
  *
- * @class Unauthorized
- * @implements ClientError
+ * @class HTTP/1.1 401 Unauthorized
+ * @extends ClientError
  */
 exports.Unauthorized = class Unauthorized extends ClientError {
   /**
@@ -495,10 +506,10 @@ exports.Unauthorized = class Unauthorized extends ClientError {
 }
 
 /**
- * Response for  HTTP/1.1 402 Payment required
+ * Response for HTTP/1.1 402 Payment required
  *
- * @class PaymentRequired
- * @implements ClientError
+ * @class HTTP/1.1 402 Payment required
+ * @extends ClientError
  */
 exports.PaymentRequired = class PaymentRequired extends ClientError {
   /**
@@ -519,10 +530,10 @@ exports.PaymentRequired = class PaymentRequired extends ClientError {
 }
 
 /**
- * Response for  HTTP/1.1 403 Forbidden
+ * Response for HTTP/1.1 403 Forbidden
  *
- * @class Forbidden
- * @implements ClientError
+ * @class HTTP/1.1 403 Forbidden
+ * @extends ClientError
  */
 exports.Forbidden = class Forbidden extends ClientError {
   /**
@@ -543,10 +554,10 @@ exports.Forbidden = class Forbidden extends ClientError {
 }
 
 /**
- * Response for  HTTP/1.1 404 Not found
+ * Response for HTTP/1.1 404 Not found
  *
- * @class NotFound
- * @implements ClientError
+ * @class HTTP/1.1 404 Not found
+ * @extends ClientError
  */
 exports.NotFound = class NotFound extends ClientError {
   /**
@@ -567,10 +578,10 @@ exports.NotFound = class NotFound extends ClientError {
 }
 
 /**
- * Response for  HTTP/1.1 405 Method not allowed
+ * Response for HTTP/1.1 405 Method not allowed
  *
- * @class MethodNotAllowed
- * @implements ClientError
+ * @class HTTP/1.1 405 Method not allowed
+ * @extends ClientError
  */
 exports.MethodNotAllowed = class MethodNotAllowed extends ClientError {
   /**
@@ -591,10 +602,10 @@ exports.MethodNotAllowed = class MethodNotAllowed extends ClientError {
 }
 
 /**
- * Response for  HTTP/1.1 406 Not acceptable
+ * Response for HTTP/1.1 406 Not acceptable
  *
- * @class NotAcceptable
- * @implements ClientError
+ * @class HTTP/1.1 406 Not acceptable
+ * @extends ClientError
  */
 exports.NotAcceptable = class NotAcceptable extends ClientError {
   /**
@@ -615,10 +626,10 @@ exports.NotAcceptable = class NotAcceptable extends ClientError {
 }
 
 /**
- * Response for  HTTP/1.1 407 Proxy authentication required
+ * Response for HTTP/1.1 407 Proxy authentication required
  *
- * @class ProxyAuthenticationRequired
- * @implements ClientError
+ * @class HTTP/1.1 407 Proxy authentication required
+ * @extends ClientError
  */
 exports.ProxyAuthenticationRequired = class ProxyAuthenticationRequired extends ClientError {
   /**
@@ -639,10 +650,10 @@ exports.ProxyAuthenticationRequired = class ProxyAuthenticationRequired extends 
 }
 
 /**
- * Response for  HTTP/1.1 408 Request timeout
+ * Response for HTTP/1.1 408 Request timeout
  *
- * @class RequestTimeout
- * @implements ClientError
+ * @class HTTP/1.1 408 Request timeout
+ * @extends ClientError
  */
 exports.RequestTimeout = class RequestTimeout extends ClientError {
   /**
@@ -674,10 +685,10 @@ exports.RequestTimeout = class RequestTimeout extends ClientError {
 }
 
 /**
- * Response for  HTTP/1.1 409 Conflict
+ * Response for HTTP/1.1 409 Conflict
  *
- * @class Conflict
- * @implements ClientError
+ * @class HTTP/1.1 409 Conflict
+ * @extends ClientError
  */
 exports.Conflict = class Conflict extends ClientError {
   /**
@@ -698,10 +709,10 @@ exports.Conflict = class Conflict extends ClientError {
 }
 
 /**
- * Response for  HTTP/1.1 410 Gone
+ * Response for HTTP/1.1 410 Gone
  *
- * @class Gone
- * @implements ClientError
+ * @class HTTP/1.1 410 Gone
+ * @extends ClientError
  */
 exports.Gone = class Gone extends ClientError {
   /**
@@ -722,10 +733,10 @@ exports.Gone = class Gone extends ClientError {
 }
 
 /**
- * Response for  HTTP/1.1 411 Length required
+ * Response for HTTP/1.1 411 Length required
  *
- * @class LengthRequired
- * @implements ClientError
+ * @class HTTP/1.1 411 Length required
+ * @extends ClientError
  */
 exports.LengthRequired = class LengthRequired extends ClientError {
   /**
@@ -746,10 +757,10 @@ exports.LengthRequired = class LengthRequired extends ClientError {
 }
 
 /**
- * Response for  HTTP/1.1 412 Precondition failed
+ * Response for HTTP/1.1 412 Precondition failed
  *
- * @class PreconditionFailed
- * @implements ClientError
+ * @class HTTP/1.1 412 Precondition failed
+ * @extends ClientError
  */
 exports.PreconditionFailed = class PreconditionFailed extends ClientError {
   /**
@@ -770,10 +781,10 @@ exports.PreconditionFailed = class PreconditionFailed extends ClientError {
 }
 
 /**
- * Response for  HTTP/1.1 413 Payload too large
+ * Response for HTTP/1.1 413 Payload too large
  *
- * @class PayloadTooLarge
- * @implements ClientError
+ * @class HTTP/1.1 413 Payload too large
+ * @extends ClientError
  */
 exports.PayloadTooLarge = class PayloadTooLarge extends ClientError {
   /**
@@ -794,10 +805,10 @@ exports.PayloadTooLarge = class PayloadTooLarge extends ClientError {
 }
 
 /**
- * Response for  HTTP/1.1 414 URI too long
+ * Response for HTTP/1.1 414 URI too long
  *
- * @class URITooLong
- * @implements ClientError
+ * @class HTTP/1.1 414 URI too long
+ * @extends ClientError
  */
 exports.URITooLong = class URITooLong extends ClientError {
   /**
@@ -818,10 +829,10 @@ exports.URITooLong = class URITooLong extends ClientError {
 }
 
 /**
- * Response for  HTTP/1.1 415 Unsupported media type
+ * Response for HTTP/1.1 415 Unsupported media type
  *
- * @class UnsupportedMediaType
- * @implements ClientError
+ * @class HTTP/1.1 415 Unsupported media type
+ * @extends ClientError
  */
 exports.UnsupportedMediaType = class UnsupportedMediaType extends ClientError {
   /**
@@ -842,10 +853,10 @@ exports.UnsupportedMediaType = class UnsupportedMediaType extends ClientError {
 }
 
 /**
- * Response for  HTTP/1.1 416 Range not satisfiable
+ * Response for HTTP/1.1 416 Range not satisfiable
  *
- * @class RangeNotSatisfiable
- * @implements ClientError
+ * @class HTTP/1.1 416 Range not satisfiable
+ * @extends ClientError
  */
 exports.RangeNotSatisfiable = class RangeNotSatisfiable extends ClientError {
   /**
@@ -866,10 +877,10 @@ exports.RangeNotSatisfiable = class RangeNotSatisfiable extends ClientError {
 }
 
 /**
- * Response for  HTTP/1.1 417 Expectation failed
+ * Response for HTTP/1.1 417 Expectation failed
  *
- * @class ExpectationFailed
- * @implements ClientError
+ * @class HTTP/1.1 417 Expectation failed
+ * @extends ClientError
  */
 exports.ExpectationFailed = class ExpectationFailed extends ClientError {
   /**
@@ -890,10 +901,10 @@ exports.ExpectationFailed = class ExpectationFailed extends ClientError {
 }
 
 /**
- * Response for  HTTP/1.1 421 Misdirected request
+ * Response for HTTP/1.1 421 Misdirected request
  *
- * @class MisdirectedRequest
- * @implements ClientError
+ * @class HTTP/1.1 421 Misdirected request
+ * @extends ClientError
  */
 exports.MisdirectedRequest = class MisdirectedRequest extends ClientError {
   /**
@@ -914,10 +925,10 @@ exports.MisdirectedRequest = class MisdirectedRequest extends ClientError {
 }
 
 /**
- * Response for  HTTP/1.1 422 Unprocessable entity
+ * Response for HTTP/1.1 422 Unprocessable entity
  *
- * @class UnprocessableEntity
- * @implements ClientError
+ * @class HTTP/1.1 422 Unprocessable entity
+ * @extends ClientError
  */
 exports.UnprocessableEntity = class UnprocessableEntity extends ClientError {
   /**
@@ -938,10 +949,10 @@ exports.UnprocessableEntity = class UnprocessableEntity extends ClientError {
 }
 
 /**
- * Response for  HTTP/1.1 423 Locked
+ * Response for HTTP/1.1 423 Locked
  *
- * @class Locked
- * @implements ClientError
+ * @class HTTP/1.1 423 Locked
+ * @extends ClientError
  */
 exports.Locked = class Locked extends ClientError {
   /**
@@ -962,10 +973,10 @@ exports.Locked = class Locked extends ClientError {
 }
 
 /**
- * Response for  HTTP/1.1 424 Failed dependency
+ * Response for HTTP/1.1 424 Failed dependency
  *
- * @class FailedDependency
- * @implements ClientError
+ * @class HTTP/1.1 424 Failed dependency
+ * @extends ClientError
  */
 exports.FailedDependency = class FailedDependency extends ClientError {
   /**
@@ -986,10 +997,10 @@ exports.FailedDependency = class FailedDependency extends ClientError {
 }
 
 /**
- * Response for  HTTP/1.1 426 Upgrade required
+ * Response for HTTP/1.1 426 Upgrade required
  *
- * @class UpgradeRequired
- * @implements ClientError
+ * @class HTTP/1.1 426 Upgrade required
+ * @extends ClientError
  */
 exports.UpgradeRequired = class UpgradeRequired extends ClientError {
   /**
@@ -1010,10 +1021,10 @@ exports.UpgradeRequired = class UpgradeRequired extends ClientError {
 }
 
 /**
- * Response for  HTTP/1.1 428 Precondition failed
+ * Response for HTTP/1.1 428 Precondition failed
  *
- * @class PreconditionFailed
- * @implements ClientError
+ * @class HTTP/1.1 428 Precondition failed
+ * @extends ClientError
  */
 exports.PreconditionRequired = class PreconditionRequired extends ClientError {
   /**
@@ -1034,10 +1045,10 @@ exports.PreconditionRequired = class PreconditionRequired extends ClientError {
 }
 
 /**
- * Response for  HTTP/1.1 429 Too many requests
+ * Response for HTTP/1.1 429 Too many requests
  *
- * @class TooManyRequests
- * @implements ClientError
+ * @class HTTP/1.1 429 Too many requests
+ * @extends ClientError
  */
 exports.TooManyRequests = class TooManyRequests extends ClientError {
   /**
@@ -1058,10 +1069,10 @@ exports.TooManyRequests = class TooManyRequests extends ClientError {
 }
 
 /**
- * Response for  HTTP/1.1 432 Request header fields too large
+ * Response for HTTP/1.1 432 Request header fields too large
  *
- * @class RequestHeaderFieldsTooLarge
- * @implements ClientError
+ * @class HTTP/1.1 432 Request header fields too large
+ * @extends ClientError
  */
 exports.RequestHeaderFieldsTooLarge = class RequestHeaderFieldsTooLarge extends ClientError {
   /**
@@ -1082,10 +1093,10 @@ exports.RequestHeaderFieldsTooLarge = class RequestHeaderFieldsTooLarge extends 
 }
 
 /**
- * Response for  HTTP/1.1 451 Unavailable for legal reasons
+ * Response for HTTP/1.1 451 Unavailable for legal reasons
  *
- * @class UnavailableForLegalReasons
- * @implements ClientError
+ * @class HTTP/1.1 451 Unavailable for legal reasons
+ * @extends ClientError
  */
 exports.UnavailableForLegalReasons = class UnavailableForLegalReasons extends ClientError {
   /**
@@ -1109,7 +1120,7 @@ exports.UnavailableForLegalReasons = class UnavailableForLegalReasons extends Cl
  * Response group for HTTP/1.1 500 Server error series
  *
  * @interface ServerError
- * @implements HTTPError
+ * @extends HTTPError
  */
 const ServerError = exports.ServerError = class ServerError extends HTTPError {
   /**
@@ -1122,10 +1133,10 @@ const ServerError = exports.ServerError = class ServerError extends HTTPError {
 }
 
 /**
- * Response for  HTTP/1.1 500 Internal server error
+ * Response for HTTP/1.1 500 Internal server error
  *
- * @class InternalServerError
- * @implements ServerError
+ * @class HTTP/1.1 500 Internal server error
+ * @extends ServerError
  */
 exports.InternalServerError = class InternalServerError extends ServerError {
   /**
@@ -1146,10 +1157,10 @@ exports.InternalServerError = class InternalServerError extends ServerError {
 }
 
 /**
- * Response for  HTTP/1.1 501 Not implemented
+ * Response for HTTP/1.1 501 Not implemented
  *
- * @class NotImplemented
- * @implements ServerError
+ * @class HTTP/1.1 501 Not implemented
+ * @extends ServerError
  */
 exports.NotImplemented = class NotImplemented extends ServerError {
   /**
@@ -1170,10 +1181,10 @@ exports.NotImplemented = class NotImplemented extends ServerError {
 }
 
 /**
- * Response for  HTTP/1.1 502 Bad gateway
+ * Response for HTTP/1.1 502 Bad gateway
  *
- * @class BadGateway
- * @implements ServerError
+ * @class HTTP/1.1 502 Bad gateway
+ * @extends ServerError
  */
 exports.BadGateway = class BadGateway extends ServerError {
   /**
@@ -1194,10 +1205,10 @@ exports.BadGateway = class BadGateway extends ServerError {
 }
 
 /**
- * Response for  HTTP/1.1 503 Service unavailable
+ * Response for HTTP/1.1 503 Service unavailable
  *
- * @class ServiceUnavailable
- * @implements ServerError
+ * @class HTTP/1.1 503 Service unavailable
+ * @extends ServerError
  */
 exports.ServiceUnavailable = class ServiceUnavailable extends ServerError {
   /**
@@ -1218,10 +1229,10 @@ exports.ServiceUnavailable = class ServiceUnavailable extends ServerError {
 }
 
 /**
- * Response for  HTTP/1.1 504 Gateway timeout
+ * Response for HTTP/1.1 504 Gateway timeout
  *
- * @class GatewayTimeout
- * @implements ServerError
+ * @class HTTP/1.1 504 Gateway timeout
+ * @extends ServerError
  */
 exports.GatewayTimeout = class GatewayTimeout extends ServerError {
   /**
@@ -1242,10 +1253,10 @@ exports.GatewayTimeout = class GatewayTimeout extends ServerError {
 }
 
 /**
- * Response for  HTTP/1.1 505 HTTP version not supported
+ * Response for HTTP/1.1 505 HTTP version not supported
  *
- * @class HTTPVersionNotSupported
- * @implements ServerError
+ * @class HTTP/1.1 505 HTTP version not supported
+ * @extends ServerError
  */
 exports.HTTPVersionNotSupported = class HTTPVersionNotSupported extends ServerError {
   /**
@@ -1266,10 +1277,10 @@ exports.HTTPVersionNotSupported = class HTTPVersionNotSupported extends ServerEr
 }
 
 /**
- * Response for  HTTP/1.1 508 Network read timeout
+ * Response for HTTP/1.1 508 Network read timeout
  *
- * @class NetworkReadTimeoutError
- * @implements ServerError
+ * @class HTTP/1.1 508 Network read timeout
+ * @extends ServerError
  */
 exports.NetworkReadTimeout = exports.NetworkReadTimeoutError = class NetworkReadTimeout extends ServerError {
   /**
