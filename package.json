@@ -1,11 +1,10 @@
 {
-  "name": "errors",
+  "name": "@vapaaradikaali/errors",
   "version": "1.0.7",
   "description": "Error types",
   "main": "index.js",
   "scripts": {
-    "doc": "jsdoc -c ./.jsdoc.json ./index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "doc": "jsdoc2md -c ./.jsdoc.json ./index.js > README.md"
   },
   "repository": {
     "type": "git",
@@ -14,6 +13,7 @@
   "author": "Arttu Manninen <arttu@kaktus.cc>",
   "license": "ISC",
   "devDependencies": {
-    "jsdoc": "^4.0.0"
+    "jsdoc": "^4.0.2",
+    "jsdoc-to-markdown": "^8.0.0"
   }
 }
